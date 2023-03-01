@@ -3,9 +3,9 @@ import { PokeSets, BattleReady, BattlePokemon } from '../data/interfaces';
 import { Pokedex } from '../data/pokedex';
 import { Natures } from '../data/natures';
 
-function getRandomKey(obj): string{
-  return Object.keys(obj)[Math.floor(Math.random() * Object.keys(obj).length)];
-}
+function getRandomKey<T>(obj: T): keyof T {
+    return Object.keys(obj as Record<keyof T, any>)[Math.floor(Math.random() * Object.keys(obj as Record<keyof T, any>).length)] as keyof T;
+  }
 
 function pick4Moves(arr: string[]){
   //take an array of 4+ moves and randomly select moves into an output array of 4 moves. 
@@ -35,14 +35,14 @@ export function getRandomPokemon(setData: PokeSets) {
   }
 
   //select random key
-  const randomSpecies = Object.keys(setData)[Math.floor(Math.random() * Object.keys(setData).length)];
+  const randomSpecies:string = Object.keys(setData)[Math.floor(Math.random() * Object.keys(setData).length)]!;
 
   //find pokedex data
   const dexData = Pokedex[randomSpecies];
 
   //get relevant information from that key
   //grab the set array
-  let sets = setData[randomSpecies].sets;
+  let sets = setData[randomSpecies]!.sets;
 
   //grab a random set from that array
   let randomSet = sets[Math.floor(Math.random() * Object.keys(sets).length)];
@@ -59,11 +59,11 @@ export function getRandomPokemon(setData: PokeSets) {
 
   //assign ability
   //TODO: assign abilities based on roles
-  if ((Object.keys(dexData.abilities).length) > 1 ){
-    let randomAbility: string = dexData.abilities[getRandomKey(dexData.abilities)];
+  if ((Object.keys(dexData!.abilities).length) > 1 ){
+    let randomAbility: string = dexData!.abilities[getRandomKey(dexData!.abilities)];
     monSet.ability = randomAbility;
   } else {
-    monSet.ability = dexData.abilities[0];
+    monSet.ability = dexData!.abilities[0];
   }
 
   //assign EVs
@@ -72,16 +72,16 @@ export function getRandomPokemon(setData: PokeSets) {
 
   //assign Nature
   //TODO: assign nature based on roles
-  monSet.nature = Natures['quirky'].name;
+  monSet.nature = Natures['quirky']!.name;
   
 
   //assign moveset
   //moves are divided by role already, so just pick them randomly
-  monSet.moves = pick4Moves(randomSet.movepool);
+  monSet.moves = pick4Moves(randomSet!.movepool);
 
   //determine tera type randomly, but only if tera is possible
-  if(randomSet.teraTypes){
-    let shuffledTypes: string[] = randomSet.teraTypes.sort(() => Math.random() - 0.5);
+  if(randomSet!.teraTypes){
+    let shuffledTypes: string[] = randomSet!.teraTypes.sort(() => Math.random() - 0.5);
     monSet.teraType = shuffledTypes[0];
   }
   
@@ -89,7 +89,7 @@ export function getRandomPokemon(setData: PokeSets) {
   //test line
   console.log("Species:", randomSpecies);
   console.log("Raw Set:", randomSet);
-  console.log("Abilities:", dexData.abilities);
+  console.log("Abilities:", dexData!.abilities);
   console.log("Battle Ready Pokemon:", monSet);
   
 

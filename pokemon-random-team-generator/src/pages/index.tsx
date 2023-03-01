@@ -1,8 +1,125 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
+import React from "react";
+
+//import functions
+import { getRandomPokemon } from "./api/functions/random";
+//import data
+import { RandomSetsSV } from "./api/data/randomSetsSV";
+//interfaces
+import { BattlePokemon, PokeSets, Team } from "./api/data/interfaces";
+
+
+
+
 
 const Home: NextPage = () => {
+  const [teamData, setTeamData] = React.useState<string>('');
+  const [team, setTeam] = React.useState<Team>({
+    1: null,
+    2: null,
+    3: null,
+    4: null,
+    5: null,
+    6: null,
+  });
+
+  React.useEffect(() => {
+    console.log('the current team state:', team);
+  }, [team]);
+
+  function generateRandomMon() {
+    /////randomize mons and set state/////
+    //make running list of chosen mons to ensure no duplicate species.
+    let teamSoFar: string[] = [];
+
+    //chose 6 mons, checking running list each time
+
+    //generate first mon
+    let slot1: BattlePokemon = getRandomPokemon(RandomSetsSV);
+    teamSoFar.push(slot1.species);
+
+    //generate the rest, checking as you go
+
+    let slot2: BattlePokemon;
+    do {
+      slot2 = getRandomPokemon(RandomSetsSV);
+    } while (teamSoFar.includes(slot2.species));
+    teamSoFar.push(slot2.species);
+
+    let slot3: BattlePokemon;
+    do {
+      slot3 = getRandomPokemon(RandomSetsSV);
+    } while (teamSoFar.includes(slot3.species));
+    teamSoFar.push(slot3.species);
+
+    let slot4: BattlePokemon;
+    do {
+      slot4 = getRandomPokemon(RandomSetsSV);
+    } while (teamSoFar.includes(slot4.species));
+    teamSoFar.push(slot4.species);
+
+    let slot5: BattlePokemon;
+    do {
+      slot5 = getRandomPokemon(RandomSetsSV);
+    } while (teamSoFar.includes(slot5.species));
+    teamSoFar.push(slot5.species);
+
+    let slot6: BattlePokemon;
+    do {
+      slot6 = getRandomPokemon(RandomSetsSV);
+    } while (teamSoFar.includes(slot6.species));
+    teamSoFar.push(slot6.species);
+
+    let newTeamState = {
+      1: slot1,
+      2: slot2,
+      3: slot3,
+      4: slot4,
+      5: slot5,
+      6: slot6,
+    };
+
+    //update team state ONCE.
+    setTeam((prevState) => {
+      return { ...prevState, ...newTeamState };
+    });
+    setTeamData('you hit the generate button. State should have updated.');
+    console.log('teamSoFar:', teamSoFar);
+  }
+
+
+  function stringifyTeam(team: Team): string {
+    //TODO write this
+    //stringify poke obj into smogon format
+    let exportTxt: string = '';
+
+    for (const i in team) {
+      //loop through each pokemon object and parse out its data
+      let pokemon = team[i];
+      //teraType could by null
+      let teraTypeExists: string = pokemon.teraType
+        ? `Tera Type: ${pokemon.teraType}`
+        : '';
+      //turn moves into hyphenated list
+      let moves = pokemon.moves.map((move) => `-${move}`).join('\n');
+      //concatinate all together
+      let pokeText = `${pokemon.species} @ ${pokemon.item}\nAbility:${pokemon.species}\n${teraTypeExists}\nEVs: ${pokemon.evSpread}\n${pokemon.nature} Nature\n${moves}\n\n`;
+      exportTxt = exportTxt.concat('', pokeText);
+    }
+
+    //send the string data to the callback function
+    console.log('trying to send this to textarea:', exportTxt);
+    return exportTxt;
+  }
+
+  function exportData() {
+    let exportTxt: string = stringifyTeam(team);
+    setTeamData(exportTxt);
+  }
+
+
   return (
     <>
       <Head>
@@ -11,7 +128,24 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#93d9d1] to-[#15162c]">
-        <h1 className="text-sm sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl">hello world</h1>
+        <h1 className="text-sm sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl">Pokemon Randomizer</h1>
+        <button className="text-xs text-white bg-black sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl" onClick={generateRandomMon}>generate</button>
+      <button className="text-xs text-white bg-black sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl" onClick={exportData}>export</button>
+      <textarea
+        name="export"
+        id="export"
+        cols="20"
+        rows="16"
+        value={teamData}
+        onChange={generateRandomMon}
+      ></textarea>
+      <p className="text-xs text-white bg-black sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl" >
+        {Object.keys(team).map((key) =>
+          team[key]
+            ? `${key}: ${team[key].species}; `
+            : `${key}: ${team[key]}; `
+        )}
+      </p>
       </main>
     </>
   );
