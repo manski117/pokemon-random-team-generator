@@ -37,38 +37,38 @@ const Home: NextPage = () => {
     //chose 6 mons, checking running list each time
 
     //generate first mon
-    let slot1: BattlePokemon = getRandomPokemon(RandomSetsSV);
+    let slot1: BattlePokemon = getRandomPokemon(RandomSetsSV as any);
     teamSoFar.push(slot1.species);
 
     //generate the rest, checking as you go
 
     let slot2: BattlePokemon;
     do {
-      slot2 = getRandomPokemon(RandomSetsSV);
+      slot2 = getRandomPokemon(RandomSetsSV as any);
     } while (teamSoFar.includes(slot2.species));
     teamSoFar.push(slot2.species);
 
     let slot3: BattlePokemon;
     do {
-      slot3 = getRandomPokemon(RandomSetsSV);
+      slot3 = getRandomPokemon(RandomSetsSV as any);
     } while (teamSoFar.includes(slot3.species));
     teamSoFar.push(slot3.species);
 
     let slot4: BattlePokemon;
     do {
-      slot4 = getRandomPokemon(RandomSetsSV);
+      slot4 = getRandomPokemon(RandomSetsSV as any);
     } while (teamSoFar.includes(slot4.species));
     teamSoFar.push(slot4.species);
 
     let slot5: BattlePokemon;
     do {
-      slot5 = getRandomPokemon(RandomSetsSV);
+      slot5 = getRandomPokemon(RandomSetsSV as any);
     } while (teamSoFar.includes(slot5.species));
     teamSoFar.push(slot5.species);
 
     let slot6: BattlePokemon;
     do {
-      slot6 = getRandomPokemon(RandomSetsSV);
+      slot6 = getRandomPokemon(RandomSetsSV as any);
     } while (teamSoFar.includes(slot6.species));
     teamSoFar.push(slot6.species);
 
@@ -99,13 +99,13 @@ const Home: NextPage = () => {
       //loop through each pokemon object and parse out its data
       let pokemon = team[i];
       //teraType could by null
-      let teraTypeExists: string = pokemon.teraType
-        ? `Tera Type: ${pokemon.teraType}`
+      let teraTypeExists: string = pokemon!.teraType
+        ? `Tera Type: ${pokemon!.teraType}`
         : '';
       //turn moves into hyphenated list
-      let moves = pokemon.moves.map((move) => `-${move}`).join('\n');
+      let moves = pokemon!.moves.map((move) => `-${move}`).join('\n');
       //concatinate all together
-      let pokeText = `${pokemon.species} @ ${pokemon.item}\nAbility:${pokemon.species}\n${teraTypeExists}\nEVs: ${pokemon.evSpread}\n${pokemon.nature} Nature\n${moves}\n\n`;
+      let pokeText = `${pokemon!.species} @ ${pokemon!.item}\nAbility:${pokemon!.species}\n${teraTypeExists}\nEVs: ${pokemon!.evSpread}\n${pokemon!.nature} Nature\n${moves}\n\n`;
       exportTxt = exportTxt.concat('', pokeText);
     }
 
@@ -134,15 +134,14 @@ const Home: NextPage = () => {
       <textarea
         name="export"
         id="export"
-        cols="20"
-        rows="16"
+        className="w-6/12 h-80"
         value={teamData}
         onChange={generateRandomMon}
       ></textarea>
       <p className="text-xs text-white bg-black sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl" >
         {Object.keys(team).map((key) =>
           team[key]
-            ? `${key}: ${team[key].species}; `
+            ? `${key}: ${team[key]!.species}; `
             : `${key}: ${team[key]}; `
         )}
       </p>

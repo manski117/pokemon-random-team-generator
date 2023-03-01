@@ -110,10 +110,10 @@ export const roles = [
     nature: string;
     evSpread?: string;
     item?: string;
-    
     teraType?: string;
+    level?: number;
   
-    constructor(species: string,  ability: string, moves: string[], nature: string, evSpread?: string, item?: string, teraType?: string) {
+    constructor(species: string,  ability: string, moves: string[], nature: string, evSpread?: string, item?: string, teraType?: string, level?: number) {
       this.species = species;
       this.ability = ability;
       this.moves = moves;
@@ -121,6 +121,7 @@ export const roles = [
       this.item = item;
       this.nature = nature;
       this.teraType = teraType;
+      this.level = level;
     }
   }
   

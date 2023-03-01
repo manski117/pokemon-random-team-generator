@@ -22,7 +22,7 @@ function pick4Moves(arr: string[]){
   }
 }
 
-export function getRandomPokemon(setData: PokeSets) {
+export function getRandomPokemon(setData: PokeSets): BattlePokemon {
   //this obj contains all battle ready pokemon data
   let monSet: BattleReady = {
     species: '',
