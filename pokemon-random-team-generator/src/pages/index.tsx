@@ -128,15 +128,15 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#93d9d1] to-[#15162c]">
         <h1 className="text-sm sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl">Pokemon Randomizer</h1>
-        <button className="text-xs text-white bg-black sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl" onClick={generateRandomMon}>generate</button>
-      <button className="text-xs text-white bg-black sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl" onClick={exportData}>export</button>
-      <textarea
-        name="export"
-        id="export"
-        className="w-6/12 h-80"
-        value={teamData}
-        onChange={generateRandomMon}
-      ></textarea>
+        <button className="inline-block cursor-pointer rounded-md bg-gray-800 px-4 py-3 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-900" onClick={generateRandomMon}>generate</button>
+        <button className="btn" onClick={exportData}>export</button>
+        <textarea
+          name="export"
+          id="export"
+          className="w-6/12 h-80"
+          value={teamData}
+          onChange={generateRandomMon}
+        ></textarea>
       <p className="text-xs text-white bg-black sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl" >
         {Object.keys(team).map((key) =>
           team[key]
@@ -144,6 +144,18 @@ const Home: NextPage = () => {
             : `${key}: ${team[key]}; `
         )}
       </p>
+      <label htmlFor="my-modal" className="btn">open modal</label>
+
+      <input type="checkbox" id="my-modal" className="modal-toggle" />
+      <div className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Congratulations random Internet user!</h3>
+          <p className="py-4">You've been selected for a chance to get one year of subscription to use Wikipedia for free!</p>
+          <div className="modal-action">
+            <label htmlFor="my-modal" className="btn">Yay!</label>
+          </div>
+        </div>
+      </div>
       </main>
     </>
   );
