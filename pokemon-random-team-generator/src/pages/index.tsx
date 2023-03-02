@@ -4,11 +4,11 @@ import Link from "next/link";
 import React from "react";
 
 //import functions
-import { getRandomPokemon } from "../../public/api/functions/random";
+import { getRandomPokemon } from "./api/functions/random";
 //import data
-import { RandomSetsSV } from "../../public/api/data/randomSetsSV";
+import { RandomSetsSV } from "./api/data/randomSetsSV";
 //interfaces
-import { BattlePokemon, PokeSets, Team } from "../../public/api/data/interfaces";
+import { BattlePokemon, PokeSets, Team } from "./api/data/interfaces";
 
 
 
