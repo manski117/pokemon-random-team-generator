@@ -9,7 +9,8 @@ Currently it is only designed to work with generation 9 (Scarlet and Violet game
 - make sure each slot can randomize individually
 - make sure they are aware of what the other pokemon will be
 - send pokemon back to root state for export
-- layout and styling
+- regex to sanitize hostile escape characters
+- **DONE** ~~layout and styling~~
 
 ## Add Styling
 - pokemon images (api call?)
@@ -27,6 +28,7 @@ Currently it is only designed to work with generation 9 (Scarlet and Violet game
 - make sure no same item
 - make sure no combined stat total over 510
 - make sure no individual stat over 252
+- don't allow hostile html injection into inputs
 
 ## Planned Future Features:
 - by type

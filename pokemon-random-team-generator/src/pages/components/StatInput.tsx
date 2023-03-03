@@ -14,7 +14,7 @@ export default function StatInput(){
         <div className="form-control">
             <label className="input-group input-group-xs ml-3">
                 <span>HP</span>
-                <input type="number" max={252} placeholder="0" className="input input-bordered input-xs w-14" />
+                <input type="number" min={0} max={252} placeholder="0" className="input input-bordered input-xs w-14" />
             </label>
         </div>
       );

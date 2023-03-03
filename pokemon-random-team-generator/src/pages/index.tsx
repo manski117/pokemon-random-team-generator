@@ -8,7 +8,7 @@ import { getRandomPokemon } from "./api/functions/random";
 //import data
 import { RandomSetsSV } from "./api/data/randomSetsSV";
 //interfaces
-import { BattlePokemon, PokeSets, Team } from "./api/data/interfaces";
+import { BattlePokemon, PokeSets, Team, LockMatrix } from "./api/data/interfaces";
 
 //components
 import TeamSlot from "./components/TeamSlot";
@@ -18,6 +18,14 @@ import TeamSlot from "./components/TeamSlot";
 
 const Home: NextPage = () => {
   const [teamData, setTeamData] = React.useState<string>('');
+  const [lockedSlots, setLockedSlots] = React.useState<LockMatrix>({
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+    5: false,
+    6: false,
+  });
   const [team, setTeam] = React.useState<Team>({
     1: null,
     2: null,
@@ -27,9 +35,18 @@ const Home: NextPage = () => {
     6: null,
   });
 
+
   React.useEffect(() => {
-    console.log('the current team state:', team);
-  }, [team]);
+    console.log('the current ROOT state:', team, lockedSlots);
+  }, [team, lockedSlots]);
+
+  function toggleLockSlotN(n: number){
+    let newLockedData: LockMatrix = {...lockedSlots};
+    newLockedData[n] = !(lockedSlots[n])
+    
+    setLockedSlots(newLockedData);
+    console.log(lockedSlots);
+  }
 
   function generateRandomMon() {
     /////randomize mons and set state/////
@@ -152,8 +169,9 @@ const Home: NextPage = () => {
                 </p>
         </div>
 
-        <div className="flex flex-wrap">
-          <TeamSlot />
+        <div id="team-gui" className="flex flex-wrap">
+          <TeamSlot slotNum={1} toggleLock={toggleLockSlotN}  />
+          <TeamSlot slotNum={2} toggleLock={toggleLockSlotN}/>
         </div>
 
 

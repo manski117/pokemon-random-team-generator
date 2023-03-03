@@ -20,6 +20,16 @@ export const roles = [
       5: null | BattlePokemon;
       6: null | BattlePokemon;
   }
+
+  export interface LockMatrix {
+    [index: number]: boolean;
+    1: boolean;
+    2: boolean;
+    3: boolean;
+    4: boolean;
+    5: boolean;
+    6: boolean;
+}
   
   
   export interface PokeSets {
