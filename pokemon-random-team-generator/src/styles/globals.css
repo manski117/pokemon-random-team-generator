@@ -4,4 +4,26 @@
 
 img{
     max-width: none;
+    
+}
+
+
+
+.stat-container {
+    display: grid;
+    width: 100%;
+    margin: 10px auto;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 2px;
+    grid-row-gap: 3px;
+}
+
+.move-container {
+    display: grid;
+    margin: 5px auto;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 3px;
+    grid-row-gap: 3px;
 }

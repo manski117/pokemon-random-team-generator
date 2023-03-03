@@ -1,6 +1,9 @@
 import React from "react";
 import { useState } from "react";
+//components
+import StatInput from "./StatInput";
 
+//default image
 let image = 'https://img.icons8.com/fluency/96/null/pokeball.png'
 
 
@@ -12,6 +15,8 @@ export default function TeamSlot() {
     //TODO: check against other pokemon
 
     //TODO: finish layout
+
+    
 
   return (
     <div className="card w-96 bg-base-100 shadow-xl flex-col items-center">
@@ -33,20 +38,20 @@ export default function TeamSlot() {
       </div>
 
 
-      <div id="move-container" className="grid-cols-2 grid-rows-2 my-5 ml-4">
+      <div id="move-container" className="move-container">
         <input type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
         <input type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
         <input type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
         <input type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
       </div>
 
-      <div id="stat-container" className="grid-cols-2 grid-rows-3 my-5 ml-4">
-        <input type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
-        <input type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
-        <input type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
-        <input type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
-        <input type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
-        <input type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
+      <div id="stat-container" className="stat-container">
+        <StatInput />
+        <StatInput />
+        <StatInput />
+        <StatInput />
+        <StatInput />
+        <StatInput />
       </div>
     </div>
   );
