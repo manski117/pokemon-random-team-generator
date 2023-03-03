@@ -20,13 +20,17 @@ export default function TeamSlot() {
 
   return (
     <div className="card w-96 bg-base-100 shadow-xl flex-col items-center">
-      <button className="btn my-5 mx-auto w-10">lock</button>
-      <div id="image-and-name" className="flex w-full h-48 border border-white justify-center ">
+      <label className="swap">
+        <input type="checkbox" />
+        <img src="https://img.icons8.com/ios/50/null/lock--v1.png" alt="" className="swap-on rounded-lg bg-neutral-content p-1 h-12 w-12 mt-2 mx-auto" />
+        <img src="https://img.icons8.com/ios/50/null/unlock.png" alt="" className="swap-off rounded-lg bg-neutral-content p-1 h-12 w-12 mt-2 mx-auto" />
+      </label>
+      <div id="image-and-name" className="flex w-full h-48  justify-center ">
         <figure className="w-1/2">
             <img
             src={image}
             alt="Pokemon Image"
-            className="rounded-xl h-40 w-40 border border-white"
+            className="rounded-xl h-40 w-40"
             />
         </figure>
         <div className="flex-col w-1/2 mt-3 overflow-hidden">
