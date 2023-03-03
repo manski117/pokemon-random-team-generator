@@ -10,6 +10,9 @@ import { RandomSetsSV } from "./api/data/randomSetsSV";
 //interfaces
 import { BattlePokemon, PokeSets, Team } from "./api/data/interfaces";
 
+//components
+import TeamSlot from "./components/TeamSlot";
+
 
 
 
@@ -128,24 +131,36 @@ const Home: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#93d9d1] to-[#15162c]">
         <h1 className="text-sm sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl">Pokemon Randomizer</h1>
-        <button className="inline-block cursor-pointer rounded-md bg-gray-800 px-4 py-3 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-900" onClick={generateRandomMon}>generate</button>
-        <button className="btn" onClick={exportData}>export</button>
-        <textarea
-          name="export"
-          id="export"
-          className="w-6/12 h-80"
-          value={teamData}
-          onChange={generateRandomMon}
-        ></textarea>
-      <p className="text-xs text-white bg-black sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl" >
-        {Object.keys(team).map((key) =>
-          team[key]
-            ? `${key}: ${team[key]!.species}; `
-            : `${key}: ${team[key]}; `
-        )}
-      </p>
+        <nav id="functionality-buttons" className="flex" >
+          <button className="inline-block cursor-pointer rounded-md bg-gray-800 px-4 py-3 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-900" onClick={generateRandomMon}>generate</button>
+          <button className="btn" onClick={exportData}>export</button>
+        </nav>
+        <div id="todo-this-will-eventually-go-in-modal" className="w-4/5">
+          <textarea
+            name="export"
+            id="export"
+            className="h-80 w-full"
+            value={teamData}
+            onChange={generateRandomMon}
+          ></textarea>
+                <p className="text-xs text-white bg-black sm:text-lg md:text-2xl lg:text-4xl xl:text-6xl" >
+          {Object.keys(team).map((key) =>
+            team[key]
+              ? `${key}: ${team[key]!.species}; `
+              : `${key}: ${team[key]}; `
+          )}
+                </p>
+        </div>
+
+        <div className="flex flex-wrap">
+          <TeamSlot />
+        </div>
+
+
+      
       <label htmlFor="my-modal" className="btn">open modal</label>
 
+      {/* Place nothing below here except for the modal!!! */}
       <input type="checkbox" id="my-modal" className="modal-toggle" />
       <div className="modal">
         <div className="modal-box">

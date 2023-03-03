@@ -5,7 +5,7 @@ export default class CustomDocument extends Document {
     render(): JSX.Element {
         return <Html>
             <Head>
-                <meta property='custom' content='nothing' />
+                {/* <meta http-equiv="img-src 'self' data:" /> */}
             </Head>
 
             <body>

@@ -22,6 +22,12 @@ Currently it is only designed to work with generation 9 (Scarlet and Violet game
 ## Export to modal
 - make modal appear with text on button press.
 
+## Tests to write:
+- make sure no pokemon have same species
+- make sure no same item
+- make sure no combined stat total over 510
+- make sure no individual stat over 252
+
 ## Planned Future Features:
 - by type
 - abilities
@@ -33,3 +39,5 @@ Currently it is only designed to work with generation 9 (Scarlet and Violet game
 - edit moves, abilities, items, stats
 - auto-populate / auto complete inputs
 - check validity
+
+
