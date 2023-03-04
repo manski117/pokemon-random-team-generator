@@ -1,5 +1,5 @@
 import { RandomSetsSV } from '../data/randomSetsSV';
-import { PokeSets, BattleReady, BattlePokemon } from '../data/interfaces';
+import { PokeSets, BattleReady, BattlePokemon, EVspread } from '../data/interfaces';
 import { Pokedex } from '../data/pokedex';
 import { Natures } from '../data/natures';
 
@@ -68,7 +68,15 @@ export function getRandomPokemon(setData: PokeSets): BattlePokemon {
 
   //assign EVs
   //TODO: assing EVs based on roles
-  monSet.evSpread = '84 HP / 84 Atk / 84 Def / 84 SpA / 84 SpD / 84 Spe'
+  
+  monSet.evSpread = {
+    HP: 84,
+    Atk: 84,
+    Def: 84,
+    SpA: 84,
+    SpD: 84,
+    Spe: 84
+  }
 
   //assign Nature
   //TODO: assign nature based on roles
@@ -94,7 +102,7 @@ export function getRandomPokemon(setData: PokeSets): BattlePokemon {
   
 
   //construct battle-ready pokemon class
-  const battleMon = new BattlePokemon(`${monSet.species}`, `${monSet.ability}`, monSet.moves, `${monSet.nature}`, `${monSet.evSpread}`, `${monSet.item}`, `${monSet.teraType}`);
+  const battleMon = new BattlePokemon(`${monSet.species}`, `${monSet.ability}`, monSet.moves, `${monSet.nature}`, monSet.evSpread, `${monSet.item}`, `${monSet.teraType}`);
 
   return battleMon;
 }

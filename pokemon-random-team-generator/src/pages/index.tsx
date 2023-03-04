@@ -8,7 +8,7 @@ import { getRandomPokemon } from "./api/functions/random";
 //import data
 import { RandomSetsSV } from "./api/data/randomSetsSV";
 //interfaces
-import { BattlePokemon, PokeSets, Team, LockMatrix } from "./api/data/interfaces";
+import { BattlePokemon, PokeSets, Team, LockMatrix, EVspread } from "./api/data/interfaces";
 
 //components
 import TeamSlot from "./components/TeamSlot";
@@ -108,6 +108,21 @@ const Home: NextPage = () => {
     console.log('teamSoFar:', teamSoFar);
   }
 
+  function createStatString(statBlock: any) {
+    //TODO: For some reason, this function is running, but ONLY returning "EVs: "
+    if (!statBlock) console.log('function cant read it for some reason?????????' );
+    if (!statBlock) return '';
+    let statString = 'EVs: ';
+    for (let stat in statBlock.evSpread) {
+      if (statBlock.evSpread[stat]) {
+        statString += `${statBlock.evSpread[stat]} ${stat} / `;
+      } else{
+        console.log('looks like the 4 loop aint adding!!!!!!!!!')
+      }
+    }
+    return statString;
+  }
+
 
   function stringifyTeam(team: Team): string {
     //TODO write this
@@ -121,12 +136,16 @@ const Home: NextPage = () => {
       let teraTypeExists: string = pokemon!.teraType
         ? `Tera Type: ${pokemon!.teraType}`
         : '';
+      //EV spreads are optional, must be parsed into list
+      let evSpread: string = createStatString(pokemon!.evSpread);
+      console.log('EV SPREAD RIGHT HERE:', pokemon?.evSpread)
       //turn moves into hyphenated list
       let moves = pokemon!.moves.map((move) => `-${move}`).join('\n');
       //concatinate all together
-      let pokeText = `${pokemon!.species} @ ${pokemon!.item}\nAbility:${pokemon!.species}\n${teraTypeExists}\nEVs: ${pokemon!.evSpread}\n${pokemon!.nature} Nature\n${moves}\n\n`;
+      let pokeText = `${pokemon!.species} @ ${pokemon!.item}\nAbility: ${pokemon!.ability}\n${teraTypeExists}\n${evSpread}\n${pokemon!.nature} Nature\n${moves}\n\n`;
       exportTxt = exportTxt.concat('', pokeText);
     }
+    // EVs: 84 HP / 84 Atk / 84 Def / 84 SpA / 84 SpD / 84 Spe
 
     //send the string data to the callback function
     console.log('trying to send this to textarea:', exportTxt);
@@ -170,8 +189,8 @@ const Home: NextPage = () => {
         </div>
 
         <div id="team-gui" className="flex flex-wrap">
-          <TeamSlot slotNum={1} toggleLock={toggleLockSlotN}  />
-          <TeamSlot slotNum={2} toggleLock={toggleLockSlotN}/>
+          <TeamSlot slotNum={1} pokeObj={team[1] ? team[1] : null} toggleLock={toggleLockSlotN}/>
+          <TeamSlot slotNum={2} pokeObj={team[2] ? team[2] : null} toggleLock={toggleLockSlotN}/>
         </div>
 
 

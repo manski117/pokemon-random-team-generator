@@ -21,6 +21,15 @@ export const roles = [
       6: null | BattlePokemon;
   }
 
+  export interface EVspread {
+    HP?: number,
+    Atk?: number,
+    Def?: number,
+    SpA?: number,
+    SpD?: number,
+    Spe?: number
+  }
+
   export interface LockMatrix {
     [index: number]: boolean;
     1: boolean;
@@ -49,7 +58,7 @@ export const roles = [
     item?: string | null;
     ability: string;
     teraType?: string | null;
-    evSpread?: string | null;
+    evSpread?: EVspread | null;
     nature?: string | null;
     moves: string[];
   }
@@ -118,12 +127,12 @@ export const roles = [
     ability: string;
     moves: string[];
     nature: string;
-    evSpread?: string;
+    evSpread?: EVspread;
     item?: string;
     teraType?: string;
     level?: number;
   
-    constructor(species: string,  ability: string, moves: string[], nature: string, evSpread?: string, item?: string, teraType?: string, level?: number) {
+    constructor(species: string,  ability: string, moves: string[], nature: string, evSpread?: EVspread, item?: string, teraType?: string, level?: number) {
       this.species = species;
       this.ability = ability;
       this.moves = moves;
