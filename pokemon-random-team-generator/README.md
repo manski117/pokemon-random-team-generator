@@ -23,6 +23,10 @@ Currently it is only designed to work with generation 9 (Scarlet and Violet game
 ## Export to modal
 - make modal appear with text on button press.
 
+
+## TODO: Debug/Fix:
+- make sure locked pkmn are added to array before randomizing the rest.
+
 ## Tests to write:
 - make sure no pokemon have same species
 - make sure no same item

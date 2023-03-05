@@ -109,16 +109,13 @@ const Home: NextPage = () => {
   }
 
   function createStatString(statBlock: any) {
-    //TODO: For some reason, this function is running, but ONLY returning "EVs: "
-    if (!statBlock) console.log('function cant read it for some reason?????????' );
-    if (!statBlock) return '';
+    //take the EVs from the obj and return them as a string
     let statString = 'EVs: ';
-    for (let stat in statBlock.evSpread) {
-      if (statBlock.evSpread[stat]) {
-        statString += `${statBlock.evSpread[stat]} ${stat} / `;
-      } else{
-        console.log('looks like the 4 loop aint adding!!!!!!!!!')
-      }
+    for (let stat in statBlock) {
+      //if a stat is not defined, skip it
+      if (statBlock[stat]) {
+        statString += `${statBlock[stat]} ${stat} / `;
+      } 
     }
     return statString;
   }
