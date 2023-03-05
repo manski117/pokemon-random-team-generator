@@ -21,6 +21,7 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
         }
     });
     const [ipokeObj, setIpokeObj] = useState<BattlePokemon | null>(pokeObj);
+    
     //useRef() detects when a prop has changed
     const prevPropsRef = React.useRef(); 
 
@@ -53,6 +54,8 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
         if (pokeObj !== prevPropsRef.current) {
             if (pokeObj){
                 setInitialInputValues();
+                
+                
                 setPokeObjRecieved(true);
             } else{
                 setPokeObjRecieved(false);
@@ -63,7 +66,6 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
     });
 
     let slotID: string = `slot${slotNum}`;
-    let speciesID: string = `species-${slotNum}`
 
     function modifyStagedPokeObj(){
         //update the modifedPoke with data from component inputs
@@ -79,7 +81,7 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
 
     function setInitialInputValues(){
         //this should ONLY run the first time a pokeObj is recieved.
-        console.log('setInitalInputValues was just called. Can you 1.See the species name 2.Modify it 3.See its onchange events logged?');
+        // console.log('setInitalInputValues was just called. Can you 1.See the species name 2.Modify it 3.See its onchange events logged?');
         
         let slotID = 'slot' + slotNum;
         let thisSlot =  document.getElementById(`${slotID}`);
@@ -92,6 +94,16 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
         ((thisSlot as HTMLDivElement).querySelector(`#ability-${slotNum}`) as HTMLInputElement).value = ability;
         let nature: string = pokeObj.nature ? pokeObj?.nature : '';
         ((thisSlot as HTMLDivElement).querySelector(`#nature-${slotNum}`) as HTMLInputElement).value = nature;
+        let move0: string = pokeObj.moves[0] ? pokeObj?.moves[0] : '';
+        ((thisSlot as HTMLDivElement).querySelector(`#move-0-${slotNum}`) as HTMLInputElement).value = move0;
+        let move1: string = pokeObj.moves[1] ? pokeObj?.moves[1] : '';
+        ((thisSlot as HTMLDivElement).querySelector(`#move-1-${slotNum}`) as HTMLInputElement).value = move1;
+        let move2: string = pokeObj.moves[2] ? pokeObj?.moves[2] : '';
+        ((thisSlot as HTMLDivElement).querySelector(`#move-2-${slotNum}`) as HTMLInputElement).value = move2;
+        let move3: string = pokeObj.moves[3] ? pokeObj?.moves[3] : '';
+        ((thisSlot as HTMLDivElement).querySelector(`#move-3-${slotNum}`) as HTMLInputElement).value = move3;
+
+        //value={pokeObj?.moves ? pokeObj!.moves[0] : null}
         
 
     }
@@ -136,19 +148,19 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
 {/* value={pokeObj?.species ? pokeObj!.species : null} */}
 
       <div id="move-container" className="move-container">
-        <input value={pokeObj?.moves ? pokeObj!.moves[0] : null} type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
-        <input value={pokeObj?.moves ? pokeObj!.moves[1] : null} type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
-        <input value={pokeObj?.moves ? pokeObj!.moves[2] : null} type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
-        <input value={pokeObj?.moves ? pokeObj!.moves[3] : null} type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
+        <input id={`move-0-${slotNum}`} onChange={handleChange} type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
+        <input id={`move-1-${slotNum}`} onChange={handleChange} type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
+        <input id={`move-2-${slotNum}`} onChange={handleChange} type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
+        <input id={`move-3-${slotNum}`} onChange={handleChange} type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
       </div>
 
       <div id="stat-container" className="stat-container">
-        <StatInput stat="HP" statValue={pokeObj?.evSpread.HP} />
-        <StatInput stat="Atk" statValue={pokeObj?.evSpread.Atk} />
-        <StatInput stat="Def" statValue={pokeObj?.evSpread.Def} />
-        <StatInput stat="SpA"  statValue={pokeObj?.evSpread.SpA}/>
-        <StatInput stat="SpD" statValue={pokeObj?.evSpread.SpD} />
-        <StatInput stat="Spe" statValue={pokeObj?.evSpread.Spe} />
+        <StatInput stat="HP" statValue={9} slotNum={slotNum} />
+        <StatInput stat="Atk" statValue={pokeObj?.evSpread.Atk} slotNum={slotNum} />
+        <StatInput stat="Def" statValue={pokeObj?.evSpread.Def} slotNum={slotNum} />
+        <StatInput stat="SpA"  statValue={pokeObj?.evSpread.SpA} slotNum={slotNum}/>
+        <StatInput stat="SpD" statValue={pokeObj?.evSpread.SpD} slotNum={slotNum} />
+        <StatInput stat="Spe" statValue={pokeObj?.evSpread.Spe} slotNum={slotNum} />
       </div>
     </div>
   );
