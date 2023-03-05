@@ -33,6 +33,7 @@ Currently it is only designed to work with generation 9 (Scarlet and Violet game
 - make sure no combined stat total over 510
 - make sure no individual stat over 252
 - don't allow hostile html injection into inputs
+- make sure pokeObjRecieved updates accurately
 
 ## Planned Future Features:
 - by type

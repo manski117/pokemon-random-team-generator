@@ -50,6 +50,10 @@ const Home: NextPage = () => {
 
   function generateRandomMon() {
     /////randomize mons and set state/////
+    //TODO: add lock logic
+    //TODO: add item logic
+    //TODO: add locked-in mons to teamSoFar array
+
     //make running list of chosen mons to ensure no duplicate species.
     let teamSoFar: string[] = [];
 
@@ -135,7 +139,7 @@ const Home: NextPage = () => {
         : '';
       //EV spreads are optional, must be parsed into list
       let evSpread: string = createStatString(pokemon!.evSpread);
-      console.log('EV SPREAD RIGHT HERE:', pokemon?.evSpread)
+      // console.log('EV SPREAD RIGHT HERE:', pokemon?.evSpread)
       //turn moves into hyphenated list
       let moves = pokemon!.moves.map((move) => `-${move}`).join('\n');
       //concatinate all together
@@ -145,7 +149,7 @@ const Home: NextPage = () => {
     // EVs: 84 HP / 84 Atk / 84 Def / 84 SpA / 84 SpD / 84 Spe
 
     //send the string data to the callback function
-    console.log('trying to send this to textarea:', exportTxt);
+    // console.log('trying to send this to textarea:', exportTxt);
     return exportTxt;
   }
 

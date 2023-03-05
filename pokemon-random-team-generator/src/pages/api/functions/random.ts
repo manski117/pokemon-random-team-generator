@@ -95,10 +95,10 @@ export function getRandomPokemon(setData: PokeSets): BattlePokemon {
   
 
   //test line
-  console.log("Species:", randomSpecies);
-  console.log("Raw Set:", randomSet);
-  console.log("Abilities:", dexData!.abilities);
-  console.log("Battle Ready Pokemon:", monSet);
+  // console.log("Species:", randomSpecies);
+  // console.log("Raw Set:", randomSet);
+  // console.log("Abilities:", dexData!.abilities);
+  // console.log("Battle Ready Pokemon:", monSet);
   
 
   //construct battle-ready pokemon class
