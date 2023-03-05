@@ -75,12 +75,12 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
       </div>
 
       <div id="stat-container" className="stat-container">
-        <StatInput />
-        <StatInput />
-        <StatInput />
-        <StatInput />
-        <StatInput />
-        <StatInput />
+        <StatInput stat="HP" statValue={pokeObj?.evSpread.HP} />
+        <StatInput stat="Atk" statValue={pokeObj?.evSpread.Atk} />
+        <StatInput stat="Def" statValue={pokeObj?.evSpread.Def} />
+        <StatInput stat="SpA"  statValue={pokeObj?.evSpread.SpA}/>
+        <StatInput stat="SpD" statValue={pokeObj?.evSpread.SpD} />
+        <StatInput stat="Spe" statValue={pokeObj?.evSpread.Spe} />
       </div>
     </div>
   );
