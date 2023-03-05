@@ -85,7 +85,13 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
         let thisSlot =  document.getElementById(`${slotID}`);
         //either put a blank or the name as the default value
         let species: string = pokeObj.species ? pokeObj?.species : '';
-        ((thisSlot as HTMLDivElement).querySelector('#species') as HTMLInputElement).value = species;
+        ((thisSlot as HTMLDivElement).querySelector(`#species-${slotNum}`) as HTMLInputElement).value = species;
+        let item: string = pokeObj.item ? pokeObj?.item : '';
+        ((thisSlot as HTMLDivElement).querySelector(`#item-${slotNum}`) as HTMLInputElement).value = item;
+        let ability: string = pokeObj.ability ? pokeObj?.ability : '';
+        ((thisSlot as HTMLDivElement).querySelector(`#ability-${slotNum}`) as HTMLInputElement).value = ability;
+        let nature: string = pokeObj.nature ? pokeObj?.nature : '';
+        ((thisSlot as HTMLDivElement).querySelector(`#nature-${slotNum}`) as HTMLInputElement).value = nature;
         
 
     }
@@ -121,10 +127,10 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
             />
         </figure>
         <div className="flex-col w-1/2 mt-3 overflow-hidden">
-            <input id='species' onChange={handleChange} type="text" placeholder="Species" className="input input-bordered w-44 h-10 mx-0 my-1 font-extrabold" />
-            <input value={ipokeObj?.item ? pokeObj!.item : null} type="text" placeholder="Item" className="input input-bordered w-44 h-8 mx-0 my-1" />
-            <input value={pokeObj?.ability ? pokeObj!.ability : null} type="text" placeholder="Ability" className="input input-bordered w-44 h-8 mx-0 my-1" />
-            <input value={pokeObj?.nature ? pokeObj!.nature : null} type="text" placeholder="Nature" className="input input-bordered w-44 h-8 mx-0 my-1" />
+            <input id={`species-${slotNum}`} onChange={handleChange} type="text" placeholder="Species" className="input input-bordered w-44 h-10 mx-0 my-1 font-extrabold" />
+            <input id={`item-${slotNum}`} onChange={handleChange} type="text" placeholder="Item" className="input input-bordered w-44 h-8 mx-0 my-1" />
+            <input id={`ability-${slotNum}`} onChange={handleChange} type="text" placeholder="Ability" className="input input-bordered w-44 h-8 mx-0 my-1" />
+            <input id={`nature-${slotNum}`} onChange={handleChange} type="text" placeholder="Nature" className="input input-bordered w-44 h-8 mx-0 my-1" />
         </div>
       </div>
 {/* value={pokeObj?.species ? pokeObj!.species : null} */}
