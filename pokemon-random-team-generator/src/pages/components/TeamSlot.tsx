@@ -9,10 +9,10 @@ import { BattlePokemon } from "../api/data/interfaces";
 let image = 'https://img.icons8.com/fluency/96/null/pokeball.png'
 
 //create context
-const StatContext = React.createContext<any>(null);
+export const StatContext = React.createContext<any>('');
 
 // slotNum={1} toggleLock={toggleLockSlotN}
-function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}: any) {
+export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}: any) {
     const [locked, setLocked] = useState<boolean>(false);
     const [modifedPoke, setModifiedPoke] = useState<BattlePokemon | null>(null);
     //this state is source of truth for if obj has been recieved or is null
@@ -192,4 +192,3 @@ function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}: any) {
   );
 }
 
-export {TeamSlot, StatContext};

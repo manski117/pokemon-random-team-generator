@@ -11,7 +11,7 @@ import { RandomSetsSV } from "./api/data/randomSetsSV";
 import { BattlePokemon, PokeSets, Team, LockMatrix, EVspread } from "./api/data/interfaces";
 
 //components
-import {TeamSlot} from "./components/TeamSlot";
+import TeamSlot from "./components/TeamSlot";
 
 
 
