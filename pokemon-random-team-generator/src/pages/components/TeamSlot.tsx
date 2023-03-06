@@ -8,8 +8,11 @@ import { BattlePokemon } from "../api/data/interfaces";
 //default image
 let image = 'https://img.icons8.com/fluency/96/null/pokeball.png'
 
+//create context
+const StatContext = React.createContext<any>(null);
+
 // slotNum={1} toggleLock={toggleLockSlotN}
-export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
+function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}: any) {
     const [locked, setLocked] = useState<boolean>(false);
     const [modifedPoke, setModifiedPoke] = useState<BattlePokemon | null>(null);
     //this state is source of truth for if obj has been recieved or is null
@@ -32,13 +35,24 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
     }, [locked]);
 
     React.useEffect(() => {
+        if (signalToUpdate != null) {
+          console.log(`this is when team slot ${slotNum} SHOULD re-render from now on`, signalToUpdate);
+          setInitialInputValues();
+          if (pokeObjRecieved){
+            updateInitialPokemonObj();
+          }  
+          console.log('the initialized team-slot-level pokeObj is currently', ipokeObj);
+        }
+      }, [signalToUpdate]);
+
+      //TODO: okay so now I just need to set that initial poke object in the right place. 
+
+    React.useEffect(() => {
         //this will run when the component detects that a pokeObj has been recieved.
         // console.log(`PokeObj has been recieved. Updating state`);
         if (pokeObj){
             if (pokeObj !== prevPropsRef.current){
-                let initalPokemonData = new BattlePokemon(`${pokeObj.species}`, `${pokeObj.ability}`, pokeObj.moves, `${pokeObj.nature}`, pokeObj.evSpread, `${pokeObj.item}`, `${pokeObj.teraType}`);
-                setIpokeObj(initalPokemonData);
-
+                updateInitialPokemonObj();
             }
             // setInitialInputValues();
             setPokeObjRecieved(true);
@@ -53,7 +67,10 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
         // console.log('this should run whenever this TeamSlot component updates...does it?');
         if (pokeObj !== prevPropsRef.current) {
             if (pokeObj){
-                setInitialInputValues();
+                
+                console.log('useRef triggered', prevPropsRef.current);
+                // setInitialInputValues();
+                
                 
                 
                 setPokeObjRecieved(true);
@@ -61,7 +78,7 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
                 setPokeObjRecieved(false);
             }
         } else{
-            console.log('looks like no change occured to the Ref')
+            // console.log('looks like no change occured to the Ref')
         }
     });
 
@@ -71,7 +88,13 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
         //update the modifedPoke with data from component inputs
         // let newStagedPoke = new BattlePokemon(`${monSet.species}`, `${monSet.ability}`, monSet.moves, `${monSet.nature}`, monSet.evSpread, `${monSet.item}`, `${monSet.teraType}`);
 
-        console.log()
+        
+    }
+
+    function updateInitialPokemonObj(){
+        //take data from prop and create an initialized obj for mutation within component
+        let initalPokemonData = new BattlePokemon(`${pokeObj.species}`, `${pokeObj.ability}`, pokeObj.moves, `${pokeObj.nature}`, pokeObj.evSpread, `${pokeObj.item}`, `${pokeObj.teraType}`);
+            setIpokeObj(initalPokemonData);
     }
 
     function exportModifiedPokeObj(){
@@ -86,24 +109,25 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
         let slotID = 'slot' + slotNum;
         let thisSlot =  document.getElementById(`${slotID}`);
         //either put a blank or the name as the default value
-        let species: string = pokeObj.species ? pokeObj?.species : '';
+        let species: string = pokeObj?.species ? pokeObj?.species : '';
         ((thisSlot as HTMLDivElement).querySelector(`#species-${slotNum}`) as HTMLInputElement).value = species;
-        let item: string = pokeObj.item ? pokeObj?.item : '';
+        let item: string = pokeObj?.item ? pokeObj?.item : '';
         ((thisSlot as HTMLDivElement).querySelector(`#item-${slotNum}`) as HTMLInputElement).value = item;
-        let ability: string = pokeObj.ability ? pokeObj?.ability : '';
+        let ability: string = pokeObj?.ability ? pokeObj?.ability : '';
         ((thisSlot as HTMLDivElement).querySelector(`#ability-${slotNum}`) as HTMLInputElement).value = ability;
-        let nature: string = pokeObj.nature ? pokeObj?.nature : '';
+        let nature: string = pokeObj?.nature ? pokeObj?.nature : '';
         ((thisSlot as HTMLDivElement).querySelector(`#nature-${slotNum}`) as HTMLInputElement).value = nature;
-        let move0: string = pokeObj.moves[0] ? pokeObj?.moves[0] : '';
+        let move0: string = pokeObj?.moves[0] ? pokeObj?.moves[0] : '';
         ((thisSlot as HTMLDivElement).querySelector(`#move-0-${slotNum}`) as HTMLInputElement).value = move0;
-        let move1: string = pokeObj.moves[1] ? pokeObj?.moves[1] : '';
+        let move1: string = pokeObj?.moves[1] ? pokeObj?.moves[1] : '';
         ((thisSlot as HTMLDivElement).querySelector(`#move-1-${slotNum}`) as HTMLInputElement).value = move1;
-        let move2: string = pokeObj.moves[2] ? pokeObj?.moves[2] : '';
+        let move2: string = pokeObj?.moves[2] ? pokeObj?.moves[2] : '';
         ((thisSlot as HTMLDivElement).querySelector(`#move-2-${slotNum}`) as HTMLInputElement).value = move2;
-        let move3: string = pokeObj.moves[3] ? pokeObj?.moves[3] : '';
+        let move3: string = pokeObj?.moves[3] ? pokeObj?.moves[3] : '';
         ((thisSlot as HTMLDivElement).querySelector(`#move-3-${slotNum}`) as HTMLInputElement).value = move3;
 
-        //value={pokeObj?.moves ? pokeObj!.moves[0] : null}
+        //finally, make sure the initialized poke obj in local state is in synch with these changes.
+         
         
 
     }
@@ -154,14 +178,18 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj}: any) {
         <input id={`move-3-${slotNum}`} onChange={handleChange} type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
       </div>
 
-      <div id="stat-container" className="stat-container">
-        <StatInput stat="HP" statValue={9} slotNum={slotNum} />
-        <StatInput stat="Atk" statValue={pokeObj?.evSpread.Atk} slotNum={slotNum} />
-        <StatInput stat="Def" statValue={pokeObj?.evSpread.Def} slotNum={slotNum} />
-        <StatInput stat="SpA"  statValue={pokeObj?.evSpread.SpA} slotNum={slotNum}/>
-        <StatInput stat="SpD" statValue={pokeObj?.evSpread.SpD} slotNum={slotNum} />
-        <StatInput stat="Spe" statValue={pokeObj?.evSpread.Spe} slotNum={slotNum} />
-      </div>
+      <StatContext.Provider value={{ipokeObj, setIpokeObj}}>
+          <div id="stat-container" className="stat-container">
+            <StatInput stat="HP" statValue={9} slotNum={slotNum} />
+            <StatInput stat="Atk" statValue={pokeObj?.evSpread.Atk} slotNum={slotNum} />
+            <StatInput stat="Def" statValue={pokeObj?.evSpread.Def} slotNum={slotNum} />
+            <StatInput stat="SpA"  statValue={pokeObj?.evSpread.SpA} slotNum={slotNum}/>
+            <StatInput stat="SpD" statValue={pokeObj?.evSpread.SpD} slotNum={slotNum} />
+            <StatInput stat="Spe" statValue={pokeObj?.evSpread.Spe} slotNum={slotNum} />
+          </div>
+      </StatContext.Provider>
     </div>
   );
 }
+
+export {TeamSlot, StatContext};

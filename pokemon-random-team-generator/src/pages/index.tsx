@@ -11,7 +11,7 @@ import { RandomSetsSV } from "./api/data/randomSetsSV";
 import { BattlePokemon, PokeSets, Team, LockMatrix, EVspread } from "./api/data/interfaces";
 
 //components
-import TeamSlot from "./components/TeamSlot";
+import {TeamSlot} from "./components/TeamSlot";
 
 
 
@@ -34,10 +34,12 @@ const Home: NextPage = () => {
     5: null,
     6: null,
   });
+  //use for signal to update teamslot
+  const [signalToUpdateTeamSlot, setSignalToUpdateTeamSlot] = React.useState(Date.now())
 
 
   React.useEffect(() => {
-    console.log('the current ROOT state:', team, lockedSlots);
+    // console.log('the current ROOT state:', team, lockedSlots);
   }, [team, lockedSlots]);
 
   function toggleLockSlotN(n: number){
@@ -109,7 +111,8 @@ const Home: NextPage = () => {
       return { ...prevState, ...newTeamState };
     });
     setTeamData('you hit the generate button. State should have updated.');
-    console.log('teamSoFar:', teamSoFar);
+    setSignalToUpdateTeamSlot(Date.now());
+    // console.log('teamSoFar:', teamSoFar);
   }
 
   function createStatString(statBlock: any) {
@@ -190,8 +193,8 @@ const Home: NextPage = () => {
         </div>
 
         <div id="team-gui" className="flex flex-wrap">
-          <TeamSlot slotNum={1} pokeObj={team[1] ? team[1] : null} toggleLock={toggleLockSlotN}/>
-          <TeamSlot slotNum={2} pokeObj={team[2] ? team[2] : null} toggleLock={toggleLockSlotN}/>
+          <TeamSlot slotNum={1} pokeObj={team[1] ? team[1] : null} toggleLock={toggleLockSlotN} signalToUpdate={signalToUpdateTeamSlot}/>
+          <TeamSlot slotNum={2} pokeObj={team[2] ? team[2] : null} toggleLock={toggleLockSlotN} signalToUpdate={signalToUpdateTeamSlot}/>
         </div>
 
 
