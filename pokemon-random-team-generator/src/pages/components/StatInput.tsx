@@ -4,25 +4,10 @@ import { StatContext } from "./TeamSlot";
 
 export default function StatInput({stat, statValue, slotNum}: any){
     const {tempPokeObj, setTempPokeObj} = React.useContext(StatContext);
-    const [statNum, setStatNum] = useState<number>(statValue ? statValue : 0);
-    const [statReceived, setStatReceived] = useState<boolean>(false);
 
     React.useEffect(() => {
         //this code will run whenever the "locked" state of this team slot changes
-        // console.log(`the local I-POKEOBJ STAT STATE just CHANGED and is:`, tempPokeObj, tempPokeObj?.evSpread?.[`${stat}`]);
-        
     }, [tempPokeObj]);
-
-    
-    //////////TODO:
-    /*
-    setInitialInput and handleChange are working just fine. 
-
-    
-    the current problem is getting the stats to reset / set to random numbers passed in ONLY when new mon is generated.
-    Probably just need to definitively set something in parent component to send a message when new randomization has happened.
-    only THEN do you set initialInputs. 
-    */
 
         //make sure number is longer
     function setInitialInput(){

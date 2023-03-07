@@ -6,7 +6,7 @@ Currently it is only designed to work with generation 9 (Scarlet and Violet game
 
 # TODO: 
 ## Create team slot components
-- make sure each slot can randomize individually
+- **DONE**  ~~make sure each slot can randomize individually~~
 - make sure they are aware of what the other pokemon will be
 - send pokemon back to root state for export
 - regex to sanitize hostile escape characters

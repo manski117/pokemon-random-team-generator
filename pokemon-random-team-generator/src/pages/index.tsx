@@ -13,6 +13,15 @@ import { BattlePokemon, PokeSets, Team, LockMatrix, EVspread } from "./api/data/
 //components
 import TeamSlot from "./components/TeamSlot";
 
+//TODO TOMORROW:
+/*
+Main issue X: My edits in Team Slot components work just fine and are saved on the tempObj in their state.
+The problem is that I'm trying to get those changes to show up on my export
+Way I'm trying to solve this issueY: setState is asynch so I can only update the team state once the 
+data from ALL components has been passed to this one. I'm currently putting them in a little container that 
+is called stagedTeam. The main problem is that for some reason, even though stagedTeam is being changed,
+those changes are somehow gone when they get to the updateTeam call.
+*/
 
 
 
@@ -35,12 +44,18 @@ const Home: NextPage = () => {
     6: null,
   });
   //use for signal to update teamslot
-  const [signalToUpdateTeamSlot, setSignalToUpdateTeamSlot] = React.useState(Date.now())
-
+  const [signalToUpdateTeamSlot, setSignalToUpdateTeamSlot] = React.useState(Date.now());
+  const [signalToConfirmExport, setSignalToConfirmExport] = React.useState(Date.now());
+  let stagedTeam = {...team};
 
   React.useEffect(() => {
     // console.log('the current ROOT state:', team, lockedSlots);
   }, [team, lockedSlots]);
+  React.useEffect(() => {
+    let exportTxt: string = stringifyTeam(team);
+    console.log(team);
+    setTeamData(exportTxt);
+  }, [team]);
 
   function toggleLockSlotN(n: number){
     let newLockedData: LockMatrix = {...lockedSlots};
@@ -48,6 +63,29 @@ const Home: NextPage = () => {
     
     setLockedSlots(newLockedData);
     console.log(lockedSlots);
+  }
+
+  function sendNewDataToRoot(updatedBattlePokemonObject: BattlePokemon, i: number){
+    //called by child components
+    //passes finalized pokeObj into root state with index that matches teamSlot number
+    console.log('this is where root state would be updated:', i, updatedBattlePokemonObject);
+    stagedTeam[i] = updatedBattlePokemonObject;
+    console.log('compare these:', team, stagedTeam);
+  }
+
+
+
+  function updateTeam(): any{
+        //create deep copy of the team obj to not edit state directly
+        let tempObj: Team = JSON.parse(JSON.stringify(stagedTeam));
+        //set state
+        console.log('calling setTeam 2 seconds after export signal. THIS SHOULD ONLY PRINT ONCE!!!!!!!!!!!!!!!! oh and btw here is the temp obj that should have just been parsed....', tempObj, stagedTeam)
+        setTeam(tempObj);
+  }
+
+  function exportData() {
+    setSignalToConfirmExport(Date.now());
+    setTimeout(updateTeam, 6000);
   }
 
   function generateRandomMon() {
@@ -137,16 +175,16 @@ const Home: NextPage = () => {
       //loop through each pokemon object and parse out its data
       let pokemon = team[i];
       //teraType could by null
-      let teraTypeExists: string = pokemon!.teraType
+      let teraTypeExists: string = pokemon?.teraType
         ? `Tera Type: ${pokemon!.teraType}`
         : '';
       //EV spreads are optional, must be parsed into list
-      let evSpread: string = createStatString(pokemon!.evSpread);
+      let evSpread: string = createStatString(pokemon?.evSpread);
       // console.log('EV SPREAD RIGHT HERE:', pokemon?.evSpread)
       //turn moves into hyphenated list
-      let moves = pokemon!.moves.map((move) => `-${move}`).join('\n');
+      let moves = pokemon?.moves.map((move) => `-${move}`).join('\n');
       //concatinate all together
-      let pokeText = `${pokemon!.species} @ ${pokemon!.item}\nAbility: ${pokemon!.ability}\n${teraTypeExists}\n${evSpread}\n${pokemon!.nature} Nature\n${moves}\n\n`;
+      let pokeText = `${pokemon?.species} @ ${pokemon?.item}\nAbility: ${pokemon?.ability}\n${teraTypeExists}\n${evSpread}\n${pokemon?.nature} Nature\n${moves}\n\n`;
       exportTxt = exportTxt.concat('', pokeText);
     }
     // EVs: 84 HP / 84 Atk / 84 Def / 84 SpA / 84 SpD / 84 Spe
@@ -154,11 +192,6 @@ const Home: NextPage = () => {
     //send the string data to the callback function
     // console.log('trying to send this to textarea:', exportTxt);
     return exportTxt;
-  }
-
-  function exportData() {
-    let exportTxt: string = stringifyTeam(team);
-    setTeamData(exportTxt);
   }
 
 
@@ -193,8 +226,8 @@ const Home: NextPage = () => {
         </div>
 
         <div id="team-gui" className="flex flex-wrap">
-          <TeamSlot slotNum={1} pokeObj={team[1] ? team[1] : null} toggleLock={toggleLockSlotN} signalToUpdate={signalToUpdateTeamSlot}/>
-          <TeamSlot slotNum={2} pokeObj={team[2] ? team[2] : null} toggleLock={toggleLockSlotN} signalToUpdate={signalToUpdateTeamSlot}/>
+          <TeamSlot slotNum={1} pokeObj={team[1] ? team[1] : null} toggleLock={toggleLockSlotN} signalToUpdate={signalToUpdateTeamSlot} signalToExport={signalToConfirmExport} exportFinal={sendNewDataToRoot}/>
+          <TeamSlot slotNum={2} pokeObj={team[2] ? team[2] : null} toggleLock={toggleLockSlotN} signalToUpdate={signalToUpdateTeamSlot} signalToExport={signalToConfirmExport} exportFinal={sendNewDataToRoot}/>
         </div>
 
 

@@ -12,7 +12,7 @@ let image = 'https://img.icons8.com/fluency/96/null/pokeball.png'
 export const StatContext = React.createContext<any>('');
 
 // slotNum={1} toggleLock={toggleLockSlotN}
-export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}: any) {
+export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate, signalToExport, exportFinal}: any) {
     const [locked, setLocked] = useState<boolean>(false);
     
     //this state is source of truth for if obj has been recieved or is null
@@ -32,6 +32,8 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
     }, [locked]);
 
     React.useEffect(() => {
+        //this only runs when a new pokemon is generated for this slot
+        //this resets the component and all data in it
         if (signalToUpdate != null) {
           console.log(`this is when team slot ${slotNum} SHOULD re-render from now on`, signalToUpdate);
           setInitialInputValues();
@@ -42,7 +44,18 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
         }
       }, [signalToUpdate]);
 
-      //TODO: okay so now I just need to set that initial poke object in the right place. 
+    React.useEffect(() => {
+    //this runs when the user hits the export button
+    //it takes the data the user has modified in the team slot and updates root team state
+    
+    if (signalToExport != null) {
+        console.log('this will send the temporaryPokeObj to root state for final export');
+        let objToExport: any = JSON.parse(JSON.stringify(tempPokeObj));
+        exportFinal(objToExport, slotNum);
+
+    }
+    }, [signalToExport]);
+
 
     React.useEffect(() => {
         //this will run when the component detects that a pokeObj has been recieved.
