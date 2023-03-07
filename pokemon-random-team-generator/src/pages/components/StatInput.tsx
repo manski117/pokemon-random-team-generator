@@ -3,15 +3,15 @@ import { useState } from "react";
 import { StatContext } from "./TeamSlot";
 
 export default function StatInput({stat, statValue, slotNum}: any){
-    const {ipokeObj, setIpokeObj} = React.useContext(StatContext);
+    const {tempPokeObj, setTempPokeObj} = React.useContext(StatContext);
     const [statNum, setStatNum] = useState<number>(statValue ? statValue : 0);
     const [statReceived, setStatReceived] = useState<boolean>(false);
 
     React.useEffect(() => {
         //this code will run whenever the "locked" state of this team slot changes
-        // console.log(`the local I-POKEOBJ STAT STATE just CHANGED and is:`, ipokeObj, ipokeObj?.evSpread?.[`${stat}`]);
+        // console.log(`the local I-POKEOBJ STAT STATE just CHANGED and is:`, tempPokeObj, tempPokeObj?.evSpread?.[`${stat}`]);
         
-    }, [ipokeObj]);
+    }, [tempPokeObj]);
 
     
     //////////TODO:
@@ -34,9 +34,11 @@ export default function StatInput({stat, statValue, slotNum}: any){
     }
 
     function updateStatState(newStatValue: any){
-        let pokeObjCopy = {...ipokeObj};
+
+        //create a temporary deep copy of our obj
+        let pokeObjCopy: any = JSON.parse(JSON.stringify(tempPokeObj));
         pokeObjCopy.evSpread[`${stat}`] = parseInt(newStatValue);
-        setIpokeObj(pokeObjCopy);
+        setTempPokeObj(pokeObjCopy);
     }
 
     
@@ -50,7 +52,7 @@ export default function StatInput({stat, statValue, slotNum}: any){
         <div className="form-control">
             <label className="input-group input-group-xs ml-3">
                 <span>{stat}</span>
-                <input value={ipokeObj ? ipokeObj?.evSpread[`${stat}`] : 0} type="number" min={0} max={252} placeholder="0" className="input input-bordered input-xs w-14"  id={`stat-${stat}-${slotNum}`} onChange={handleChange} />
+                <input value={tempPokeObj ? tempPokeObj?.evSpread[`${stat}`] : 0} type="number" min={0} max={252} placeholder="0" className="input input-bordered input-xs w-14"  id={`stat-${stat}-${slotNum}`} onChange={handleChange} />
             </label>
         </div>
       );

@@ -14,7 +14,7 @@ export const StatContext = React.createContext<any>('');
 // slotNum={1} toggleLock={toggleLockSlotN}
 export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}: any) {
     const [locked, setLocked] = useState<boolean>(false);
-    const [modifedPoke, setModifiedPoke] = useState<BattlePokemon | null>(null);
+    
     //this state is source of truth for if obj has been recieved or is null
     const [pokeObjRecieved, setPokeObjRecieved] = useState<boolean>(() => {
         if (pokeObj){
@@ -23,12 +23,12 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
             return false;
         }
     });
-    const [ipokeObj, setIpokeObj] = useState<BattlePokemon | null>(pokeObj);
+    const [tempPokeObj, setTempPokeObj] = useState<BattlePokemon | null>(pokeObj);
 
     React.useEffect(() => {
         //this code will run whenever the "locked" state of this team slot changes
         console.log(`slot ${slotNum} state changed:`, locked);
-        console.log('current state of this TeamSlot:', pokeObjRecieved, ipokeObj, pokeObj);
+        console.log('current state of this TeamSlot:', pokeObjRecieved, tempPokeObj, pokeObj);
     }, [locked]);
 
     React.useEffect(() => {
@@ -38,7 +38,7 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
           if (pokeObjRecieved){
             updateInitialPokemonObj();
           }  
-          console.log('the initialized team-slot-level pokeObj is currently', ipokeObj);
+          console.log('the initialized team-slot-level pokeObj is currently', tempPokeObj);
         }
       }, [signalToUpdate]);
 
@@ -74,7 +74,7 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
     function updateInitialPokemonObj(){
         //take data from prop and create an initialized obj for mutation within component
         let initalPokemonData = new BattlePokemon(`${pokeObj.species}`, `${pokeObj.ability}`, pokeObj.moves, `${pokeObj.nature}`, pokeObj.evSpread, `${pokeObj.item}`, `${pokeObj.teraType}`);
-            setIpokeObj(initalPokemonData);
+            setTempPokeObj(initalPokemonData);
     }
 
     function exportModifiedPokeObj(){
@@ -99,6 +99,10 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
         ((thisSlot as HTMLDivElement).querySelector(`#ability-${slotNum}`) as HTMLInputElement).value = ability;
         let nature: string = pokeObj?.nature ? pokeObj?.nature : '';
         ((thisSlot as HTMLDivElement).querySelector(`#nature-${slotNum}`) as HTMLInputElement).value = nature;
+        
+        let teraType: string = pokeObj?.teraType ? pokeObj?.teraType : '';
+        ((thisSlot as HTMLDivElement).querySelector(`#teraType-${slotNum}`) as HTMLInputElement).value = teraType;
+
         let move0: string = pokeObj?.moves[0] ? pokeObj?.moves[0] : '';
         ((thisSlot as HTMLDivElement).querySelector(`#move-0-${slotNum}`) as HTMLInputElement).value = move0;
         let move1: string = pokeObj?.moves[1] ? pokeObj?.moves[1] : '';
@@ -108,9 +112,6 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
         let move3: string = pokeObj?.moves[3] ? pokeObj?.moves[3] : '';
         ((thisSlot as HTMLDivElement).querySelector(`#move-3-${slotNum}`) as HTMLInputElement).value = move3;
 
-        //finally, make sure the initialized poke obj in local state is in synch with these changes.
-         
-        
 
     }
     //pokeObj?.species ? ((thisSlot as HTMLDivElement).querySelector('species') as HTMLInputElement).value = pokeObj.species : console.log('null');
@@ -124,21 +125,21 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
 
     function modifyInitialPokeObjProp(key: string, newValue: string){
         //create a temporary deep copy of our obj
-        let temporaryContainerObj: any = JSON.parse(JSON.stringify(ipokeObj));
+        let temporaryContainerObj: any = JSON.parse(JSON.stringify(tempPokeObj));
         temporaryContainerObj[key] =  newValue;
         console.log('If we were to call the setter function here, the new initial pokeObj state would be this:', temporaryContainerObj);
-        setIpokeObj(temporaryContainerObj);
+        setTempPokeObj(temporaryContainerObj);
         
     }
 
     function modifyInitialPokeObjMoves(key: string, newValue: string, moveSlotIndex: number = 0){
         //create a temporary deep copy of our obj
-        let temporaryContainerObj: any = JSON.parse(JSON.stringify(ipokeObj));
+        let temporaryContainerObj: any = JSON.parse(JSON.stringify(tempPokeObj));
         temporaryContainerObj[key][moveSlotIndex] =  newValue;
         // console.log('this is what we are trying to modify:', temporaryContainerObj);
         // console.log('using this input data:', key, newValue, moveSlotIndex);
         console.log('If we were to call the setter function here, the new initial pokeObj state would be this:', temporaryContainerObj);
-        setIpokeObj(temporaryContainerObj);
+        setTempPokeObj(temporaryContainerObj);
     }
 
     function handleChange(event: any){
@@ -173,12 +174,12 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
             <img onClick={lockThisSlot} src="https://img.icons8.com/ios/50/null/unlock.png" alt="" className="swap-off rounded-lg bg-neutral-content p-1 h-12 w-12 mt-2 mx-auto" />
           </label>
       </div>
-      <div id="image-and-name" className="flex w-full h-48  justify-center ">
+      <div id="image-and-name" className="flex w-full h-56  justify-center ">
         <figure className="w-1/2">
             <img
             src={image}
             alt="Pokemon Image"
-            className="rounded-xl h-40 w-40"
+            className="rounded-xl h-48 w-48"
             />
         </figure>
         <div className="flex-col w-1/2 mt-3 overflow-hidden">
@@ -186,6 +187,7 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
             <input id={`item-${slotNum}`} onChange={handleChange} type="text" placeholder="Item" className="input input-bordered w-44 h-8 mx-0 my-1" />
             <input id={`ability-${slotNum}`} onChange={handleChange} type="text" placeholder="Ability" className="input input-bordered w-44 h-8 mx-0 my-1" />
             <input id={`nature-${slotNum}`} onChange={handleChange} type="text" placeholder="Nature" className="input input-bordered w-44 h-8 mx-0 my-1" />
+            <input id={`teraType-${slotNum}`} onChange={handleChange} type="text" placeholder="Tera Type" className="input input-bordered w-44 h-8 mx-0 my-1" />
         </div>
       </div>
 {/* value={pokeObj?.species ? pokeObj!.species : null} */}
@@ -197,7 +199,7 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
         <input id={`move-3-${slotNum}`} onChange={handleChange} type="text" placeholder="-" className="input input-bordered w-44 h-8 mx-0 my-1" />
       </div>
 
-      <StatContext.Provider value={{ipokeObj, setIpokeObj}}>
+      <StatContext.Provider value={{tempPokeObj, setTempPokeObj}}>
           <div id="stat-container" className="stat-container">
             <StatInput stat="HP" statValue={9} slotNum={slotNum} />
             <StatInput stat="Atk" statValue={pokeObj?.evSpread.Atk} slotNum={slotNum} />
