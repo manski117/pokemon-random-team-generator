@@ -24,14 +24,11 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
         }
     });
     const [ipokeObj, setIpokeObj] = useState<BattlePokemon | null>(pokeObj);
-    
-    //useRef() detects when a prop has changed
-    const prevPropsRef = React.useRef(); 
 
     React.useEffect(() => {
         //this code will run whenever the "locked" state of this team slot changes
         console.log(`slot ${slotNum} state changed:`, locked);
-        console.log('current state of this TeamSlot:', modifedPoke, pokeObjRecieved, ipokeObj);
+        console.log('current state of this TeamSlot:', pokeObjRecieved, ipokeObj, pokeObj);
     }, [locked]);
 
     React.useEffect(() => {
@@ -51,10 +48,7 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
         //this will run when the component detects that a pokeObj has been recieved.
         // console.log(`PokeObj has been recieved. Updating state`);
         if (pokeObj){
-            if (pokeObj !== prevPropsRef.current){
-                updateInitialPokemonObj();
-            }
-            // setInitialInputValues();
+            updateInitialPokemonObj();
             setPokeObjRecieved(true);
         } else{
             setPokeObjRecieved(false);
@@ -65,31 +59,17 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
         //this will check on every component update to see if props have changed.
         //this will update the pokeObjRecieved state if it detects a change
         // console.log('this should run whenever this TeamSlot component updates...does it?');
-        if (pokeObj !== prevPropsRef.current) {
-            if (pokeObj){
-                
-                console.log('useRef triggered', prevPropsRef.current);
-                // setInitialInputValues();
-                
-                
-                
-                setPokeObjRecieved(true);
-            } else{
-                setPokeObjRecieved(false);
-            }
+        if (pokeObj) {
+            console.log('useRef triggered');
+            setPokeObjRecieved(true);
         } else{
-            // console.log('looks like no change occured to the Ref')
+            setPokeObjRecieved(false);
         }
     });
 
     let slotID: string = `slot${slotNum}`;
 
-    function modifyStagedPokeObj(){
-        //update the modifedPoke with data from component inputs
-        // let newStagedPoke = new BattlePokemon(`${monSet.species}`, `${monSet.ability}`, monSet.moves, `${monSet.nature}`, monSet.evSpread, `${monSet.item}`, `${monSet.teraType}`);
 
-        
-    }
 
     function updateInitialPokemonObj(){
         //take data from prop and create an initialized obj for mutation within component
@@ -101,6 +81,8 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
         //this function will be called by parent component
         //creates a finalized pokeObj and then sends it to root state to be exported as txt
     }
+
+    //////TODO: grab all values from the inputs and make sure they are accurate/////
 
     function setInitialInputValues(){
         //this should ONLY run the first time a pokeObj is recieved.
@@ -140,8 +122,45 @@ export default function TeamSlot({slotNum, toggleLock, pokeObj, signalToUpdate}:
         console.log(`slot ${slotNum} is locked:`, locked);
     }
 
+    function modifyInitialPokeObjProp(key: string, newValue: string){
+        //create a temporary deep copy of our obj
+        let temporaryContainerObj: any = JSON.parse(JSON.stringify(ipokeObj));
+        temporaryContainerObj[key] =  newValue;
+        console.log('If we were to call the setter function here, the new initial pokeObj state would be this:', temporaryContainerObj);
+        setIpokeObj(temporaryContainerObj);
+        
+    }
+
+    function modifyInitialPokeObjMoves(key: string, newValue: string, moveSlotIndex: number = 0){
+        //create a temporary deep copy of our obj
+        let temporaryContainerObj: any = JSON.parse(JSON.stringify(ipokeObj));
+        temporaryContainerObj[key][moveSlotIndex] =  newValue;
+        // console.log('this is what we are trying to modify:', temporaryContainerObj);
+        // console.log('using this input data:', key, newValue, moveSlotIndex);
+        console.log('If we were to call the setter function here, the new initial pokeObj state would be this:', temporaryContainerObj);
+        setIpokeObj(temporaryContainerObj);
+    }
+
     function handleChange(event: any){
         console.log(event.target.value);
+        
+        //slice off the last 2 characters of the id to make key
+        let key = event.target.id.slice(0, -2);
+        
+        //if it is a move, parse the key additionally
+        if (key.includes('move')){
+            console.log('TRUE: the key contains move', key);
+            //parse the word move and the move array index to seperate variables
+            let parsedMoveNumber: number = key.slice(-1);
+            let parsedKey: string = (key.slice(0,4) + 's');
+            console.log('parsing produces:', parsedMoveNumber, parsedKey);
+            modifyInitialPokeObjMoves(parsedKey, event.target.value, parsedMoveNumber);
+        } else{
+            console.log('FALSE: the key is NOT a move', key);
+            modifyInitialPokeObjProp(key, event.target.value);
+        }
+
+        //
     }
 
   return (
