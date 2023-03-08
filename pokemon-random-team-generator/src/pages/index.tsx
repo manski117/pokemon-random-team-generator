@@ -70,22 +70,34 @@ const Home: NextPage = () => {
     //passes finalized pokeObj into root state with index that matches teamSlot number
     console.log('this is where root state would be updated:', i, updatedBattlePokemonObject);
     stagedTeam[i] = updatedBattlePokemonObject;
+
+    
+    let newTeamState = {...team};
+    newTeamState[i] = updatedBattlePokemonObject;
+    //update team state ONCE.
+    //This if-statement makes it so that setTeam does not trigger until all components have had a chance to update the stagedTeam array
+    if (i > 1){
+      console.log('this should only trigger ONCE when the last team slot is passed into stagedTeam');
+      setTeam(stagedTeam);
+    }
+    
     console.log('compare these:', team, stagedTeam);
+
   }
 
-
+///lets just try editing main team obj directly.
 
   function updateTeam(): any{
         //create deep copy of the team obj to not edit state directly
-        let tempObj: Team = JSON.parse(JSON.stringify(stagedTeam));
+        // let tempObj: Team = JSON.parse(JSON.stringify(stagedTeam));
         //set state
-        console.log('calling setTeam 2 seconds after export signal. THIS SHOULD ONLY PRINT ONCE!!!!!!!!!!!!!!!! oh and btw here is the temp obj that should have just been parsed....', tempObj, stagedTeam)
-        setTeam(tempObj);
+        console.log('calling setTeam 2 seconds after export signal. THIS SHOULD ONLY PRINT ONCE!!!!!!!!!!!!!!!! oh and btw here is the temp obj that should have just been parsed....', stagedTeam)
+        // setTeam(tempObj);
   }
 
   function exportData() {
     setSignalToConfirmExport(Date.now());
-    setTimeout(updateTeam, 6000);
+    setTimeout(updateTeam, 2000);
   }
 
   function generateRandomMon() {
@@ -228,6 +240,10 @@ const Home: NextPage = () => {
         <div id="team-gui" className="flex flex-wrap">
           <TeamSlot slotNum={1} pokeObj={team[1] ? team[1] : null} toggleLock={toggleLockSlotN} signalToUpdate={signalToUpdateTeamSlot} signalToExport={signalToConfirmExport} exportFinal={sendNewDataToRoot}/>
           <TeamSlot slotNum={2} pokeObj={team[2] ? team[2] : null} toggleLock={toggleLockSlotN} signalToUpdate={signalToUpdateTeamSlot} signalToExport={signalToConfirmExport} exportFinal={sendNewDataToRoot}/>
+          <TeamSlot slotNum={3} pokeObj={team[3] ? team[3] : null} toggleLock={toggleLockSlotN} signalToUpdate={signalToUpdateTeamSlot} signalToExport={signalToConfirmExport} exportFinal={sendNewDataToRoot}/>
+          <TeamSlot slotNum={4} pokeObj={team[4] ? team[4] : null} toggleLock={toggleLockSlotN} signalToUpdate={signalToUpdateTeamSlot} signalToExport={signalToConfirmExport} exportFinal={sendNewDataToRoot}/>
+          <TeamSlot slotNum={5} pokeObj={team[5] ? team[5] : null} toggleLock={toggleLockSlotN} signalToUpdate={signalToUpdateTeamSlot} signalToExport={signalToConfirmExport} exportFinal={sendNewDataToRoot}/>
+          <TeamSlot slotNum={6} pokeObj={team[6] ? team[6] : null} toggleLock={toggleLockSlotN} signalToUpdate={signalToUpdateTeamSlot} signalToExport={signalToConfirmExport} exportFinal={sendNewDataToRoot}/>
         </div>
 
 
